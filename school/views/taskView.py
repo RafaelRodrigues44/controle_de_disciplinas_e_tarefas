@@ -2,12 +2,12 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from school.models.taskModel import TaskModel
-from school.serializers.taskSerializer import TaskModelSerializer
+from school.serializers.taskSerializer import TaskSerializer
 
 class TaskList(APIView):
     def get(self, request):
         tasks = TaskModel.objects.all()
-        serializer = TaskModelSerializer(tasks, many=True)
+        serializer = TaskSerializer(tasks, many=True)
         return Response(serializer.data)
 
     def post(self, request):

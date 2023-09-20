@@ -6,6 +6,6 @@ from school.serializers.taskSerializer import TaskSerializer
 
 class StudentTasksList(APIView):
     def get(self, request, student_id):
-        tasks = TaskModel.objects.filter(student_id=student_id)
+        tasks = TaskModel.objects.filter(student=student_id)
         serializer = TaskSerializer(tasks, many=True)
         return Response(serializer.data)
