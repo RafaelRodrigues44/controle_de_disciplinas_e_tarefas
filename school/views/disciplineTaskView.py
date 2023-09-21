@@ -17,11 +17,17 @@ class DisciplineTasksList(APIView):
         Returns:
             Response: Uma resposta JSON contendo as tarefas correspondentes.
         """
-        # Filtra as tarefas com base no ID da disciplina e no ID da tarefa usando o modelo TaskModel.
-        tasks = TaskModel.objects.filter(disciplinas=discipline_id, id=pk)
-        
-        # Serializa as tarefas encontradas usando o serializador TaskSerializer.
-        serializer = TaskSerializer(tasks, many=True)
-        
-        # Retorna uma resposta HTTP com os dados serializados das tarefas.
-        return Response(serializer.data)
+        try:
+            # Filtra as tarefas com base no ID da disciplina.
+            tasks = TaskModel.objects.filter(disciplines=discipline_id, id=pk)
+            
+            # Verifica se a tarefa com o ID especificado pertence à disciplina.
+            task = tasks.first()
+            if task:
+                # Serializa a tarefa encontrada usando o serializador TaskSerializer.
+                serializer = TaskSerializer(task)
+                return Response(serializer.data)
+            else:
+                return Response({'error': 'Tarefa não encontrada nesta disciplina.'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
