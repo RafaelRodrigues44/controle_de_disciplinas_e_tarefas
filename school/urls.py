@@ -6,12 +6,12 @@ from school.views.disciplineTaskView import DisciplineTasksList
 from school.views.studentTaskView import StudentTasksList
 
 schoolUrls = [
-    path('/students/', StudentList.as_view(), name='student-list'),
-    path('/students/<int:id>/', StudentDetail.as_view(), name='student-detail'),
-    path('/disciplines/', DisciplineList.as_view(), name='disciplines-list'),
-    path('/disciplines/<int:id>/', DisciplineDetail.as_view(), name='disciplines-detail'),
-    path('/tasks/', TaskList.as_view(), name='task-list'),
-    path('/tasks/<int:id>/', TaskDetail.as_view(), name='task-detail'),
-    path('/students/<int:student_id>/tasks/', StudentTasksList.as_view(), name='student-tasks-list'),
-    path('/disciplines/<int:discipline_id>/tasks/', DisciplineTasksList.as_view(), name='discipline-tasks-list'),
+    path('students/', StudentList.as_view(), name='student-list'),
+    path('students/<int:pk>/', StudentDetail.as_view(), name='student-detail'),
+    path('disciplines/', DisciplineList.as_view(), name='disciplines-list'),
+    path('disciplines/<int:pk>/', DisciplineDetail.as_view(), name='disciplines-detail'),
+    path('tasks/', TaskList.as_view(), name='task-list'),
+    path('tasks/<int:pk>/', TaskDetail.as_view(), name='task-detail'),
+    path('students/<int:student_id>/tasks/', StudentTasksList.as_view(), name='student-tasks-list'),
+    path('disciplines/<int:discipline_id>/tasks/', DisciplineTasksList.as_view(), name='discipline-tasks-list'),
 ]
