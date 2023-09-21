@@ -2,7 +2,7 @@
 # Aluno: Rafael Rodrigues - Ads 2º Semestre - Senai Gaspar Ricardo júnior
 
 
-Esta é uma API de Controle Escolar que permite gerenciar tarefas, alunos e disciplinas. Ela oferece operações CRUD para cada uma dessas entidades, bem como a capacidade de consultar as disciplinas de um aluno.
+Esta é uma API de Controle Escolar que permite gerenciar tarefas, alunos e disciplinas. Ela oferece operações CRUD para cada uma dessas entidades, bem como a capacidade de consultar as tarefas de um aluno.
 
 ## Funcionalidades Principais
 
