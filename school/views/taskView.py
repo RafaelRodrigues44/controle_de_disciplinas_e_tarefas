@@ -2,8 +2,10 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from school.models.taskModel import TaskModel  # Importa o modelo de dados 'TaskModel'.
-from school.serializers.taskSerializer import TaskSerializer  # Importa o serializador 'TaskSerializer'.
+from school.models.taskModel import TaskModel  #
+from school.serializers.taskSerializer import TaskSerializer  
+from school.models.studentModel import Student
+
 
 # Define uma classe 'TaskList' que herda de 'APIView'.
 class TaskList(APIView):
@@ -15,17 +17,20 @@ class TaskList(APIView):
         # Retorna a resposta com os dados serializados.
         return Response(serializer.data)
 
-    # Método para lidar com solicitações POST para criar uma nova tarefa.
     def post(self, request):
-        # Serializa os dados da solicitação em um novo objeto 'TaskModel'.
-        serializer = TaskSerializer(data=request.data)
-        if serializer.is_valid():
-            # Salva a nova tarefa no banco de dados.
-            serializer.save()
-            # Retorna os dados serializados da nova tarefa com status 201 (Created).
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        # Em caso de dados inválidos, retorna uma resposta de erro com status 400.
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # Obtém o ID do estudante a partir dos dados da solicitação
+        student_id = request.data.get('student', None)
+        
+        # Verifica se o ID do estudante é válido
+        if student_id is not None:
+            student = Student.objects.get(pk=student_id)
+            serializer = TaskSerializer(data=request.data)
+            if serializer.is_valid():
+                # Define o campo 'student' com o objeto do estudante
+                serializer.validated_data['student'] = student
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 # Define uma classe 'TaskDetail' que herda de 'APIView'.
 class TaskDetail(APIView):
