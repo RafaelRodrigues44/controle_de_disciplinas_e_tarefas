@@ -9,6 +9,12 @@ from school.serializers.studentSerializer import StudentSerializer  # Importa o 
 class StudentList(APIView):
     # Método para lidar com solicitações GET para listar todos os estudantes.
     def get(self, request):
+        """
+        Método GET para listar todos os estudantes 
+
+        Returns:
+            Response: Uma resposta JSON contendo os estudantes cadastrados.
+        """
         try:
             # Obtém todos os objetos do modelo 'Student'.
             students = Student.objects.all()
@@ -22,6 +28,12 @@ class StudentList(APIView):
 
     # Método para lidar com solicitações POST para criar um novo estudante.
     def post(self, request):
+        """
+        Método POST para criar um estudante
+
+        Returns:
+            Response: Uma resposta JSON contendo o estudante criado.
+        """
         try:
             # Verifica se não há dados na solicitação POST.
             if not request.data:
@@ -60,6 +72,12 @@ class StudentDetail(APIView):
 
     # Método para lidar com solicitações GET para obter detalhes de um estudante pelo seu ID.
     def get(self, request, pk):
+        """
+        Método GET para listar uma  estudante pelo seu id 
+
+        Returns:
+            Response: Uma resposta JSON contendo o estudante buscada.
+        """
         try:
             # Obtém o objeto 'Student' pelo ID (pk).
             student = self.get_object(pk)
@@ -76,6 +94,12 @@ class StudentDetail(APIView):
 
     # Método para lidar com solicitações PUT para atualizar os detalhes de um estudante pelo seu ID.
     def put(self, request, pk):
+        """
+        Método PUT para alterar dados de um aluno pelo seu id 
+
+        Returns:
+            Response: Uma resposta JSON contendo todos os campos do cadastro do aluno, inclusive o alterado.
+        """
         try:
             # Obtém o objeto 'Student' pelo ID (pk).
             student = self.get_object(pk)

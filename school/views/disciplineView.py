@@ -9,6 +9,12 @@ from school.serializers.disciplineSerializer import DisciplineSerializer  # Impo
 class DisciplineList(APIView):
     # Método para lidar com solicitações GET para listar todas as disciplinas.
     def get(self, request):
+        """
+        Método GET para listar todas as  disciplinas 
+
+        Returns:
+            Response: Uma resposta JSON contendo as discplinas.
+        """
         disciplines = Discipline.objects.all()
         # Serializa os objetos 'disciplines' em formato JSON usando o serializador 'DisciplineSerializer'.
         serializer = DisciplineSerializer(disciplines, many=True)
@@ -17,6 +23,14 @@ class DisciplineList(APIView):
 
     # Método para lidar com solicitações POST para criar uma nova disciplina.
     def post(self, request):
+        
+        """
+        Método POST para criar uma disciplinas 
+
+        Returns:
+            Response: Uma resposta JSON contendo a discplina criada.
+        """
+        
         # Serializa os dados da solicitação em um novo objeto 'Discipline'.
         serializer = DisciplineSerializer(data=request.data)
         if serializer.is_valid():
@@ -31,6 +45,7 @@ class DisciplineList(APIView):
 class DisciplineDetail(APIView):
     # Método auxiliar para obter uma disciplina pelo seu ID.
     def get_object(self, id):
+        
         try:
             # Tenta obter uma disciplina pelo ID fornecido.
             return Discipline.objects.get(id=id)
@@ -40,6 +55,12 @@ class DisciplineDetail(APIView):
 
     # Método para lidar com solicitações GET para obter detalhes de uma disciplina pelo seu ID.
     def get(self, request, id):
+        """
+        Método GET para listar uma  disciplina pelo seu id 
+
+        Returns:
+            Response: Uma resposta JSON contendo a discplina buscada.
+        """
         discipline = self.get_object(id)
         if discipline is not None:
             # Serializa os detalhes da disciplina em formato JSON.
@@ -51,6 +72,12 @@ class DisciplineDetail(APIView):
 
     # Método para lidar com solicitações PUT para atualizar os detalhes de uma disciplina pelo seu ID.
     def put(self, request, id):
+        """
+        Método PUT para alterar uma  disciplina pelo seu id 
+
+        Returns:
+            Response: Uma resposta JSON contendo a discplina buscada.
+        """
         discipline = self.get_object(id)
         if discipline is not None:
             # Serializa os dados da solicitação e atualiza a disciplina.
@@ -66,6 +93,12 @@ class DisciplineDetail(APIView):
 
     # Método para lidar com solicitações DELETE para excluir uma disciplina pelo seu ID.
     def delete(self, request, id):
+        """
+        Método DELETE para listar uma  disciplina pelo seu id 
+
+        Returns:
+            Response: Uma resposta JSON contendo a discplina deletada.
+        """
         discipline = self.get_object(id)
         if discipline is not None:
             # Certifique-se de desassociar as tarefas relacionadas a esta disciplina
