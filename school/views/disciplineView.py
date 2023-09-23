@@ -2,8 +2,11 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from school.models.disciplineModel import Discipline  # Importa o modelo de dados 'Discipline'.
-from school.serializers.disciplineSerializer import DisciplineSerializer  # Importa o serializador 'DisciplineSerializer'.
+from school.models.disciplineModel import Discipline  
+from school.serializers.disciplineSerializer import DisciplineSerializer  
+from school.exceptions.disciplinesExceptions import DisciplineValidationException
+
+
 
 # Define uma classe 'DisciplineList' que herda de 'APIView'.
 class DisciplineList(APIView):
@@ -23,23 +26,31 @@ class DisciplineList(APIView):
 
     # Método para lidar com solicitações POST para criar uma nova disciplina.
     def post(self, request):
-        
         """
-        Método POST para criar uma disciplinas 
+        Método POST para criar uma disciplina
 
         Returns:
-            Response: Uma resposta JSON contendo a discplina criada.
+            Response: Uma resposta JSON contendo a disciplina criada ou mensagens de erro de validação.
         """
-        
-        # Serializa os dados da solicitação em um novo objeto 'Discipline'.
-        serializer = DisciplineSerializer(data=request.data)
-        if serializer.is_valid():
-            # Salva a nova disciplina no banco de dados.
-            serializer.save()
-            # Retorna os dados serializados da nova disciplina com status 201 (Created).
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        # Em caso de dados inválidos, retorna uma resposta de erro com status 400.
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            # Serializa os dados da solicitação em um novo objeto 'Discipline'.
+            serializer = DisciplineSerializer(data=request.data)
+            # Verifica se os dados são válidos.
+            if serializer.is_valid():
+                # Salva a nova disciplina no banco de dados.
+                serializer.save()
+                # Retorna os dados serializados da nova disciplina com status 201 (Created).
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            
+            # Em caso de dados inválidos, lança a exceção de validação com as mensagens de erro.
+            raise DisciplineValidationException
+
+        except DisciplineValidationException as e:
+            # Captura a exceção personalizada e retorna as mensagens de erro de validação.
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            # Em caso de erro, retorna uma resposta de erro com status 500.
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 # Define uma classe 'DisciplineDetail' que herda de 'APIView'.
 class DisciplineDetail(APIView):
