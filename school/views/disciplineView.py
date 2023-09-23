@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from school.models.disciplineModel import Discipline  
 from school.serializers.disciplineSerializer import DisciplineSerializer  
-from school.exceptions.disciplinesExceptions import DisciplineValidationException
+from school.exceptions.disciplinesExceptions import DisciplineValidationException, DisciplineNotFoundException, NoDisciplinesFoundException
 
 
 
@@ -13,12 +13,17 @@ class DisciplineList(APIView):
     # Método para lidar com solicitações GET para listar todas as disciplinas.
     def get(self, request):
         """
-        Método GET para listar todas as  disciplinas 
+        Método GET para listar todas as disciplinas.
 
         Returns:
-            Response: Uma resposta JSON contendo as discplinas.
+            Response: Uma resposta JSON contendo as disciplinas.
         """
         disciplines = Discipline.objects.all()
+        
+        if not disciplines.exists():
+            # Se a lista de disciplinas estiver vazia, levante a exceção NoDisciplinesFoundException.
+            raise NoDisciplinesFoundException
+        
         # Serializa os objetos 'disciplines' em formato JSON usando o serializador 'DisciplineSerializer'.
         serializer = DisciplineSerializer(disciplines, many=True)
         # Retorna a resposta com os dados serializados.
@@ -111,12 +116,18 @@ class DisciplineDetail(APIView):
             Response: Uma resposta JSON contendo a discplina deletada.
         """
         discipline = self.get_object(id)
+        
         if discipline is not None:
-            # Certifique-se de desassociar as tarefas relacionadas a esta disciplina
-            discipline.tasks.clear()
-            # Exclui a disciplina do banco de dados.
+            # Verifica se existem tarefas associadas a esta disciplina.
+            related_tasks = discipline.taskmodel_set.all()
+            
+            if related_tasks.exists():
+                # Se houver tarefas associadas, percorra todas e remova a associação com a disciplina.
+                for task in related_tasks:
+                    task.disciplines.remove(discipline)
+            
+            # Em seguida, exclua a disciplina.
             discipline.delete()
-            # Retorna uma resposta com status 204 (No Content) para indicar a exclusão bem-sucedida.
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        # Retorna uma resposta com status 404 (Not Found) se a disciplina não existir.
-        return Response(status=status.HTTP_404_NOT_FOUND)
+            return Response("Discipline deleted!", status=status.HTTP_204_NO_CONTENT)
+        
+        raise DisciplineNotFoundException
