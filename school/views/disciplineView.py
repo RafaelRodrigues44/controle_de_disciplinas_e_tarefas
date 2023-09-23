@@ -61,30 +61,29 @@ class DisciplineList(APIView):
 class DisciplineDetail(APIView):
     # Método auxiliar para obter uma disciplina pelo seu ID.
     def get_object(self, id):
-        
         try:
             # Tenta obter uma disciplina pelo ID fornecido.
             return Discipline.objects.get(id=id)
         except Discipline.DoesNotExist:
-            # Retorna None se a disciplina não existir.
-            return None
-
-    # Método para lidar com solicitações GET para obter detalhes de uma disciplina pelo seu ID.
+            # Levanta a exceção DisciplineNotFoundException se a disciplina não existir.
+            raise DisciplineNotFoundException
+    
     def get(self, request, id):
         """
-        Método GET para listar uma  disciplina pelo seu id 
+        Método GET para obter uma disciplina pelo seu ID.
 
         Returns:
-            Response: Uma resposta JSON contendo a discplina buscada.
+            Response: Uma resposta JSON contendo os dados da disciplina.
         """
         discipline = self.get_object(id)
         if discipline is not None:
-            # Serializa os detalhes da disciplina em formato JSON.
+            # Serializa a disciplina encontrada em formato JSON usando o serializador 'DisciplineSerializer'.
             serializer = DisciplineSerializer(discipline)
-            # Retorna a resposta com os dados serializados da disciplina.
+            # Retorna a resposta com os dados serializados.
             return Response(serializer.data)
-        # Retorna uma resposta com status 404 (Not Found) se a disciplina não existir.
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        # Se a disciplina não for encontrada, a exceção será levantada e tratada automaticamente.
+        raise DisciplineNotFoundException
+
 
     # Método para lidar com solicitações PUT para atualizar os detalhes de uma disciplina pelo seu ID.
     def put(self, request, id):

@@ -16,3 +16,8 @@ class NoDisciplinesFoundException(APIException):
     status_code = 404
     default_code = 'no_disciplines_found'
     default_detail = 'Database has no disciplines found.'
+
+class DisciplineNotFoundException(APIException):
+    status_code = 404
+    default_code = 'discipline_not_found'
+    default_detail = 'Discipline not found.'

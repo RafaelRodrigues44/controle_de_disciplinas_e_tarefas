@@ -27,16 +27,16 @@ msgid "Portuguese"
 msgstr ""
 
 #: school/exceptions/disciplineTasksExceptions.py:6
-msgid "Discipline not found in the database."
+msgid "Disciplina não encontrada no banco de dados."
 msgstr ""
 
 #: school/exceptions/disciplineTasksExceptions.py:11
 #: school/exceptions/studentTasksExceptions.py:11
-msgid "No tasks associated with the discipline."
+msgid "Disciplina sem tarefas associadas."
 msgstr ""
 
 #: school/exceptions/studentTasksExceptions.py:6
-msgid "Student not found in the database."
+msgid "Aluno não encontrado no banco de dados."
 msgstr ""
 
 #: school/exceptions/studentTasksExceptions.py:18
